@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0540B23A2A08CF9B007A4D65 /* UserPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540B2392A08CF9B007A4D65 /* UserPrompt.swift */; };
+		0540B23C2A0A2341007A4D65 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540B23B2A0A2341007A4D65 /* MainView.swift */; };
 		05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DF42A04EF0100DEF42E /* RedCalApp.swift */; };
 		05858DF72A04EF0100DEF42E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DF62A04EF0100DEF42E /* ContentView.swift */; };
 		05858DF92A04EF0200DEF42E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05858DF82A04EF0200DEF42E /* Assets.xcassets */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0540B2392A08CF9B007A4D65 /* UserPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPrompt.swift; sourceTree = "<group>"; };
+		0540B23B2A0A2341007A4D65 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		05858DF12A04EF0100DEF42E /* RedCal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedCal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05858DF42A04EF0100DEF42E /* RedCalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCalApp.swift; sourceTree = "<group>"; };
 		05858DF62A04EF0100DEF42E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -56,6 +60,8 @@
 			isa = PBXGroup;
 			children = (
 				05858DF42A04EF0100DEF42E /* RedCalApp.swift */,
+				0540B2392A08CF9B007A4D65 /* UserPrompt.swift */,
+				0540B23B2A0A2341007A4D65 /* MainView.swift */,
 				05858DF62A04EF0100DEF42E /* ContentView.swift */,
 				05858DF82A04EF0200DEF42E /* Assets.xcassets */,
 				05858DFD2A04EF0200DEF42E /* Persistence.swift */,
@@ -144,9 +150,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				05858DFE2A04EF0200DEF42E /* Persistence.swift in Sources */,
+				0540B23C2A0A2341007A4D65 /* MainView.swift in Sources */,
 				05858DF72A04EF0100DEF42E /* ContentView.swift in Sources */,
 				05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */,
 				05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */,
+				0540B23A2A08CF9B007A4D65 /* UserPrompt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
