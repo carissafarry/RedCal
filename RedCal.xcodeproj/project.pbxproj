@@ -15,6 +15,7 @@
 		05858DFC2A04EF0200DEF42E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05858DFB2A04EF0200DEF42E /* Preview Assets.xcassets */; };
 		05858DFE2A04EF0200DEF42E /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DFD2A04EF0200DEF42E /* Persistence.swift */; };
 		05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 05858DFF2A04EF0200DEF42E /* RedCal.xcdatamodeld */; };
+		05CC9BEF2A0CDFF2004CC855 /* AnswerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		05858DFB2A04EF0200DEF42E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		05858DFD2A04EF0200DEF42E /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		05858E002A04EF0200DEF42E /* RedCal.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RedCal.xcdatamodel; sourceTree = "<group>"; };
+		05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			children = (
 				05858DF42A04EF0100DEF42E /* RedCalApp.swift */,
 				0540B2392A08CF9B007A4D65 /* UserPrompt.swift */,
+				05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */,
 				0540B23B2A0A2341007A4D65 /* MainView.swift */,
 				05858DF62A04EF0100DEF42E /* ContentView.swift */,
 				05858DF82A04EF0200DEF42E /* Assets.xcassets */,
@@ -154,6 +157,7 @@
 				05858DF72A04EF0100DEF42E /* ContentView.swift in Sources */,
 				05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */,
 				05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */,
+				05CC9BEF2A0CDFF2004CC855 /* AnswerManager.swift in Sources */,
 				0540B23A2A08CF9B007A4D65 /* UserPrompt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

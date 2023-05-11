@@ -24,9 +24,6 @@ struct MainView: View {
 //                }
 //            )
         }
-        .onAppear(){
-            print("hjhgj")
-        }
     }
     
 //    var bounds: PartialRangeFrom<Date> {
@@ -52,7 +49,7 @@ struct MainView: View {
                             Text("All >")
                         })
                     }
-                    .padding(.top, 25)
+                    .padding(.top, 35)
                     
                     ZStack {
                         Rectangle()
@@ -60,6 +57,7 @@ struct MainView: View {
                             .foregroundColor(.white)
                             .padding(.bottom, 25)
                         
+                        // TODO: Display highlighted predicted dates
                         MultiDatePicker(
                             "Start Date",
                             selection: $predictedDates,

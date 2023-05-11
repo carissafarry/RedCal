@@ -9,15 +9,12 @@ import SwiftUI
 
 @main
 struct RedCalApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject var answerManager = AnswerManager()
 
-    init() {
-        print("haha")
-    }
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ContentView()
+                .environmentObject(answerManager)
         }
     }
 }
