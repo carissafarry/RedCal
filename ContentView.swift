@@ -8,16 +8,7 @@
 import SwiftUI
 import CoreData
 
-
 struct ContentView: View {
-    var body: some View {
-        NavigationStack {
-            UserPrompt()
-        }
-    }
-}
-
-struct ContentView1: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -92,10 +83,6 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        @StateObject var answerManager = AnswerManager()
-        
-        ContentView()
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-            .environmentObject(answerManager)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

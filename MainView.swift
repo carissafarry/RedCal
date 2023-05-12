@@ -10,12 +10,19 @@ import SwiftUI
 struct MainView: View {
     @Environment(\.calendar) var calendar
     
-    @EnvironmentObject var answerManager: AnswerManager
     @State private var predictedDates: Set<DateComponents> = []
     
     var body: some View {
         ScrollView {
             periodPrediction()
+            
+//            Button(action: {
+//                print("asdasd")
+//
+//            }, label: {
+//                Text("save")
+//                }
+//            )
         }
     }
     
@@ -42,7 +49,7 @@ struct MainView: View {
                             Text("All >")
                         })
                     }
-                    .padding(.top, 35)
+                    .padding(.top, 25)
                     
                     ZStack {
                         Rectangle()
@@ -50,7 +57,6 @@ struct MainView: View {
                             .foregroundColor(.white)
                             .padding(.bottom, 25)
                         
-                        // TODO: Display highlighted predicted dates
                         MultiDatePicker(
                             "Start Date",
                             selection: $predictedDates,
