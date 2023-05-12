@@ -13,26 +13,6 @@ struct Prompt {
     let options: [String]?
 }
 
-struct Answer {
-    var promptID: Int
-    var answer: AnswerType
-}
-
-enum AnswerInputType {
-    case date
-    case number
-}
-
-protocol AnswerType {}
-
-struct DateAnswer: AnswerType {
-    let date: Date
-}
-
-struct NumericAnswer: AnswerType {
-    let number: Int
-}
-
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
@@ -47,7 +27,12 @@ struct UserPrompt: View {
             options: nil
         ),
         Prompt(
-            question: "How much your usual period length?",
+            question: "How much your usual period duration?",
+            answerInputType: .number,
+            options: nil
+        ),
+        Prompt(
+            question: "How much your usual period cycle length?",
             answerInputType: .number,
             options: nil
         ),
@@ -59,7 +44,7 @@ struct UserPrompt: View {
         VStack {
             TabView(selection: $currentCardIndex) {
                 ForEach((prompts.indices), id: \.self) { index in
-                    PromptCard(prompts: $prompts, currentCardIndex: $currentCardIndex, answers: $answers)
+                  PromptCard(prompts: $prompts, currentCardIndex: $currentCardIndex)
                 }
                 
             }
@@ -85,13 +70,10 @@ struct UserPrompt: View {
 struct PromptCard: View {
     @Binding var prompts: [Prompt]
     @Binding var currentCardIndex: Int
-    @Binding var answers: [Answer]
+    @EnvironmentObject var answerManager: AnswerManager
     
     @State var dateAnswer = Date.now
     @State var numberAnswer = -1
-    
-    
-    @State private var usersAnswer = ""
     
     
     var body: some View {
@@ -120,7 +102,7 @@ struct PromptCard: View {
                         
                     case .number:
                         Picker("", selection: $numberAnswer) {
-                            ForEach(1...14, id: \.self) { number in
+                            ForEach(1...30, id: \.self) { number in
                                 Text("\(number)")
                             }
                         }
@@ -130,29 +112,24 @@ struct PromptCard: View {
                             .padding(.horizontal, screenWidth * 0.1)
                 }
                 
-                if currentCardIndex >= (prompts.count - 1) {
-                    NavigationLink(
-                        destination: MainView()
-                            .navigationBarBackButtonHidden(true)
-                    ) {
-                        Text("To Main View")
+                Button(action: {
+                    let answer: Answer
+                    
+                    switch prompts[currentCardIndex].answerInputType {
+                        case .date:
+                            answer = Answer(promptID: currentCardIndex, answer: DateAnswer(date: dateAnswer))
+                        case .number:
+                            answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
                     }
-                } else {
-                    Button(action: {
-                        let answer: Answer
-                        
-                        switch prompts[currentCardIndex].answerInputType {
-                            case .date:
-                                answer = Answer(promptID: currentCardIndex, answer: DateAnswer(date: dateAnswer))
-                            case .number:
-                                answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
-                        }
-                        
-                        saveOrUpdateAnswer(answer: answer)
-                        print(answers)
-
+                    
+                    saveOrUpdateAnswer(answer: answer)
+                    print(answerManager.answers)
+                    
+                    if currentCardIndex < (prompts.count - 1) {
                         currentCardIndex += 1
-                    }, label: {
+                    }
+                }) {
+                    if currentCardIndex < (prompts.count - 1) {
                         ZStack {
                             Rectangle ()
                                 .frame(width: screenWidth * 0.65, height: screenHeight * 0.05)
@@ -161,17 +138,42 @@ struct PromptCard: View {
                             Text("Save")
                                 .foregroundColor(.white)
                         }
-                    })
+                    } else {
+                        NavigationLink(
+                            destination: MainView()
+                                .navigationBarBackButtonHidden(true)
+                        ) {
+                            ZStack {
+                                Rectangle ()
+                                    .frame(width: screenWidth * 0.65, height: screenHeight * 0.05)
+                                    .cornerRadius(10)
+                                    .foregroundColor(.green)
+
+                                Text("Next")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .simultaneousGesture(TapGesture().onEnded{
+                            let answer: Answer
+                            answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
+                            
+                            saveOrUpdateAnswer(answer: answer)
+                            answerManager.calculatePeriodDate()
+                        })
+                        
+                    }
                 }
             }
         }
     }
     
     private func saveOrUpdateAnswer(answer: Answer) {
+        let answers = answerManager.answers
+        
         if let index = answers.firstIndex(where: { $0.promptID == answer.promptID }) {
-            answers[index] = answer
+            answerManager.updateAnswer(at: index, with: answer)
         } else {
-            answers.append(answer)
+            answerManager.addAnswer(answer)
         }
     }
 }
