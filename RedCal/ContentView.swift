@@ -94,7 +94,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var answerManager = AnswerManager()
         
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView()
+//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(answerManager)
     }
 }

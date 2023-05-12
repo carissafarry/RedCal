@@ -10,19 +10,12 @@ import SwiftUI
 struct MainView: View {
     @Environment(\.calendar) var calendar
     
+    @EnvironmentObject var answerManager: AnswerManager
     @State private var predictedDates: Set<DateComponents> = []
     
     var body: some View {
         ScrollView {
             periodPrediction()
-            
-//            Button(action: {
-//                print("asdasd")
-//
-//            }, label: {
-//                Text("save")
-//                }
-//            )
         }
     }
     

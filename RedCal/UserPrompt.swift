@@ -13,26 +13,6 @@ struct Prompt {
     let options: [String]?
 }
 
-struct Answer {
-    var promptID: Int
-    var answer: AnswerType
-}
-
-enum AnswerInputType {
-    case date
-    case number
-}
-
-protocol AnswerType {}
-
-struct DateAnswer: AnswerType {
-    let date: Date
-}
-
-struct NumericAnswer: AnswerType {
-    let number: Int
-}
-
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
@@ -47,7 +27,7 @@ struct UserPrompt: View {
             options: nil
         ),
         Prompt(
-            question: "How much your usual period length?",
+            question: "How much your usual period duration?",
             answerInputType: .number,
             options: nil
         ),
@@ -122,7 +102,7 @@ struct PromptCard: View {
                         
                     case .number:
                         Picker("", selection: $numberAnswer) {
-                            ForEach(1...14, id: \.self) { number in
+                            ForEach(1...30, id: \.self) { number in
                                 Text("\(number)")
                             }
                         }
@@ -143,12 +123,11 @@ struct PromptCard: View {
                     }
                     
                     saveOrUpdateAnswer(answer: answer)
-
+                    print(answerManager.answers)
+                    
                     if currentCardIndex < (prompts.count - 1) {
                         currentCardIndex += 1
                     }
-                    
-                    print(answerManager.answers)
                 }) {
                     if currentCardIndex < (prompts.count - 1) {
                         ZStack {
@@ -169,11 +148,19 @@ struct PromptCard: View {
                                     .frame(width: screenWidth * 0.65, height: screenHeight * 0.05)
                                     .cornerRadius(10)
                                     .foregroundColor(.green)
-                                
+
                                 Text("Next")
                                     .foregroundColor(.white)
                             }
                         }
+                        .simultaneousGesture(TapGesture().onEnded{
+                            let answer: Answer
+                            answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
+                            
+                            saveOrUpdateAnswer(answer: answer)
+                            answerManager.calculatePeriodDate()
+                        })
+                        
                     }
                 }
             }
@@ -193,9 +180,6 @@ struct PromptCard: View {
 
 struct UserPrompt_Previews: PreviewProvider {
     static var previews: some View {
-        @StateObject var answerManager = AnswerManager()
-        
         UserPrompt()
-            .environmentObject(answerManager)
     }
 }
