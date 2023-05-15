@@ -71,6 +71,7 @@ struct PromptCard: View {
     @Binding var prompts: [Prompt]
     @Binding var currentCardIndex: Int
     @EnvironmentObject var answerManager: AnswerManager
+    @EnvironmentObject var periodManager: PeriodManager
     
     @State var dateAnswer = Date.now
     @State var numberAnswer = -1
@@ -159,6 +160,24 @@ struct PromptCard: View {
                             
                             saveOrUpdateAnswer(answer: answer)
                             answerManager.calculatePeriodDate()
+                            
+                            // Add answer data to period data
+                            let lastPeriodAnswer = answerManager.getLastPeriodAnswer()
+                            let periodDurationAnswer = answerManager.getPeriodDurationAnswer()
+                            let cycleLengthAnswer = answerManager.getCycleLengthAnswer()
+                            let startDatePeriod = answerManager.getStartDateOfLastPeriod()
+                            
+                            if let lastPeriodDate = (lastPeriodAnswer!.answer as? DateAnswer)?.date,
+                               let cycleLength = (cycleLengthAnswer!.answer as? NumericAnswer)?.number,
+                               let periodDuration = (periodDurationAnswer!.answer as? NumericAnswer)?.number {
+                                let firstPeriod = Period(
+                                 startDate: startDatePeriod!,
+                                 endDate: lastPeriodDate,
+                                 duration: periodDuration,
+                                 cycleLength: cycleLength
+                                )
+                                periodManager.addPeriod(firstPeriod)
+                            }
                         })
                         
                     }

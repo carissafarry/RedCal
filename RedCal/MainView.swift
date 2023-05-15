@@ -11,11 +11,19 @@ struct MainView: View {
     @Environment(\.calendar) var calendar
     
     @EnvironmentObject var answerManager: AnswerManager
+    @EnvironmentObject var periodManager: PeriodManager
+    
     @State private var predictedDates: Set<DateComponents> = []
+    
+    @State private var isAddPeriod = false
     
     var body: some View {
         ScrollView {
+            header()
             periodPrediction()
+        }
+        .onAppear {
+            print(periodManager.periods)
         }
     }
     
@@ -27,15 +35,48 @@ struct MainView: View {
         return start ..< end
     }
     
+    func header() -> some View {
+        HStack(alignment:.top) {
+            VStack(alignment: .leading) {
+                Text("Good Morning")
+                    .font(.system(size: 25, weight: .medium, design: .default))
+                    .foregroundColor(.gray)
+                Text("Jesselyn")
+                    .font(.system(size: 35, weight: .medium, design: .default))
+                    .foregroundColor(.black)
+            }
+            
+            Spacer()
+            
+            ZStack(alignment:.topTrailing) {
+                Button(action: {
+                    isAddPeriod = true
+                }) {
+                    ZStack {
+                        Rectangle()
+                            .fill(.opacity(0))
+                            .frame(width:screenWidth * 0.08, height: screenHeight * 0.05)
+                        
+                        Text("+")
+                            .font(.system(size: 25, weight: .medium, design: .default))
+                            .foregroundColor(.black)
+                    }
+                }
+                .sheet(isPresented: $isAddPeriod, content: {
+                    AddPeriod()
+                })
+            }
+        }
+        .frame(width: screenWidth*0.92)
+    }
+    
     func periodPrediction() -> some View {
-         
          HStack {
             Section {
                 VStack {
                     HStack {
                         Text("Period Prediction")
                             .font(.body)
-//                                .background(.red)
                         
                         Spacer()
                         Button(action: {}, label: {
@@ -67,13 +108,6 @@ struct MainView: View {
                         .accentColor(.pink)
                         .shadow(radius: 0)
                         .padding(.bottom, 20)
-                        
-                        
-                        // Display the selected dates
-//                        Text("Selected Dates:")
-//                        ForEach(predictedDates, id: \.self) { date in
-//                            Text(dateFormatter.string(from: date))
-//                        }
                     }
                 }
             }

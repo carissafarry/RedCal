@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0540B23A2A08CF9B007A4D65 /* UserPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540B2392A08CF9B007A4D65 /* UserPrompt.swift */; };
 		0540B23C2A0A2341007A4D65 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540B23B2A0A2341007A4D65 /* MainView.swift */; };
+		05633BB42A0E453D00E6852A /* AddPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05633BB32A0E453D00E6852A /* AddPeriod.swift */; };
+		05633BB62A0E4C4C00E6852A /* PeriodManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05633BB52A0E4C4C00E6852A /* PeriodManager.swift */; };
 		05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DF42A04EF0100DEF42E /* RedCalApp.swift */; };
 		05858DF72A04EF0100DEF42E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DF62A04EF0100DEF42E /* ContentView.swift */; };
 		05858DF92A04EF0200DEF42E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05858DF82A04EF0200DEF42E /* Assets.xcassets */; };
@@ -21,6 +23,8 @@
 /* Begin PBXFileReference section */
 		0540B2392A08CF9B007A4D65 /* UserPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPrompt.swift; sourceTree = "<group>"; };
 		0540B23B2A0A2341007A4D65 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		05633BB32A0E453D00E6852A /* AddPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPeriod.swift; sourceTree = "<group>"; };
+		05633BB52A0E4C4C00E6852A /* PeriodManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodManager.swift; sourceTree = "<group>"; };
 		05858DF12A04EF0100DEF42E /* RedCal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedCal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05858DF42A04EF0100DEF42E /* RedCalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedCalApp.swift; sourceTree = "<group>"; };
 		05858DF62A04EF0100DEF42E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,10 +65,12 @@
 		05858DF32A04EF0100DEF42E /* RedCal */ = {
 			isa = PBXGroup;
 			children = (
+				05633BB52A0E4C4C00E6852A /* PeriodManager.swift */,
 				05858DF42A04EF0100DEF42E /* RedCalApp.swift */,
 				0540B2392A08CF9B007A4D65 /* UserPrompt.swift */,
 				05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */,
 				0540B23B2A0A2341007A4D65 /* MainView.swift */,
+				05633BB32A0E453D00E6852A /* AddPeriod.swift */,
 				05858DF62A04EF0100DEF42E /* ContentView.swift */,
 				05858DF82A04EF0200DEF42E /* Assets.xcassets */,
 				05858DFD2A04EF0200DEF42E /* Persistence.swift */,
@@ -158,6 +164,8 @@
 				05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */,
 				05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */,
 				05CC9BEF2A0CDFF2004CC855 /* AnswerManager.swift in Sources */,
+				05633BB42A0E453D00E6852A /* AddPeriod.swift in Sources */,
+				05633BB62A0E4C4C00E6852A /* PeriodManager.swift in Sources */,
 				0540B23A2A08CF9B007A4D65 /* UserPrompt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

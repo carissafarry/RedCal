@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct RedCalApp: App {
     @StateObject var answerManager = AnswerManager()
+    @StateObject var periodManager = PeriodManager()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(answerManager)
+                .environmentObject(periodManager)
         }
     }
 }

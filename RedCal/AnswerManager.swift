@@ -90,4 +90,21 @@ class AnswerManager: ObservableObject {
         }
         return nil
     }
+    
+    func getStartDateOfLastPeriod() -> Date? {
+        guard let lastPeriodAnswer = getLastPeriodAnswer(),
+              let periodDurationAnswer = getPeriodDurationAnswer()
+        else {
+            return nil
+        }
+
+        if let lastPeriodDate = (lastPeriodAnswer.answer as? DateAnswer)?.date,
+           let periodDuration = (periodDurationAnswer.answer as? NumericAnswer)?.number,
+           answers.count > 0 {
+            let adjustedStartDate = Calendar.current.date(byAdding: .day, value: -(periodDuration), to: lastPeriodDate)!
+
+            return adjustedStartDate
+        }
+        return nil
+    }
 }
