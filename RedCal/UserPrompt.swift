@@ -50,7 +50,7 @@ struct UserPrompt: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
         }
-        .frame(height: screenHeight * 0.7)
+        .background(Color(hex: "FEF0F0"))
     }
     
     func slideCardLeft() {
@@ -142,6 +142,8 @@ struct PromptCard: View {
                     } else {
                         NavigationLink(
                             destination: MainView()
+                                .environmentObject(answerManager)
+                                .environmentObject(periodManager)
                                 .navigationBarBackButtonHidden(true)
                         ) {
                             ZStack {
@@ -182,6 +184,7 @@ struct PromptCard: View {
                         
                     }
                 }
+                .background(Color(hex: "FEF0F0"))
             }
         }
     }
@@ -199,6 +202,11 @@ struct PromptCard: View {
 
 struct UserPrompt_Previews: PreviewProvider {
     static var previews: some View {
+        @StateObject var answerManager = AnswerManager()
+        @StateObject var periodManager = PeriodManager()
+        
         UserPrompt()
+            .environmentObject(answerManager)
+            .environmentObject(periodManager)
     }
 }

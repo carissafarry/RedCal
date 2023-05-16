@@ -18,6 +18,7 @@
 		05858DFE2A04EF0200DEF42E /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05858DFD2A04EF0200DEF42E /* Persistence.swift */; };
 		05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 05858DFF2A04EF0200DEF42E /* RedCal.xcdatamodeld */; };
 		05CC9BEF2A0CDFF2004CC855 /* AnswerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */; };
+		05FAC9A62A12F38D00AD8659 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FAC9A52A12F38D00AD8659 /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		05858DFD2A04EF0200DEF42E /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		05858E002A04EF0200DEF42E /* RedCal.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RedCal.xcdatamodel; sourceTree = "<group>"; };
 		05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerManager.swift; sourceTree = "<group>"; };
+		05FAC9A52A12F38D00AD8659 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,10 +67,10 @@
 		05858DF32A04EF0100DEF42E /* RedCal */ = {
 			isa = PBXGroup;
 			children = (
-				05633BB52A0E4C4C00E6852A /* PeriodManager.swift */,
+				05FAC9A42A12F37C00AD8659 /* Utils */,
+				05FAC9A12A12372600AD8659 /* Model */,
 				05858DF42A04EF0100DEF42E /* RedCalApp.swift */,
 				0540B2392A08CF9B007A4D65 /* UserPrompt.swift */,
-				05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */,
 				0540B23B2A0A2341007A4D65 /* MainView.swift */,
 				05633BB32A0E453D00E6852A /* AddPeriod.swift */,
 				05858DF62A04EF0100DEF42E /* ContentView.swift */,
@@ -86,6 +88,23 @@
 				05858DFB2A04EF0200DEF42E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		05FAC9A12A12372600AD8659 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				05633BB52A0E4C4C00E6852A /* PeriodManager.swift */,
+				05CC9BEE2A0CDFF2004CC855 /* AnswerManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		05FAC9A42A12F37C00AD8659 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				05FAC9A52A12F38D00AD8659 /* Color.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +182,7 @@
 				05858DF72A04EF0100DEF42E /* ContentView.swift in Sources */,
 				05858E012A04EF0200DEF42E /* RedCal.xcdatamodeld in Sources */,
 				05858DF52A04EF0100DEF42E /* RedCalApp.swift in Sources */,
+				05FAC9A62A12F38D00AD8659 /* Color.swift in Sources */,
 				05CC9BEF2A0CDFF2004CC855 /* AnswerManager.swift in Sources */,
 				05633BB42A0E453D00E6852A /* AddPeriod.swift in Sources */,
 				05633BB62A0E4C4C00E6852A /* PeriodManager.swift in Sources */,
