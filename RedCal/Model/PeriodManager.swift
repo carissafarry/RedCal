@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Period {
+struct Period: Hashable {
     var startDate: Date
     var endDate: Date
     var duration: Int?
@@ -19,6 +19,5 @@ class PeriodManager: ObservableObject {
     
     func addPeriod(_ period: Period) {
         periods.append(period)
-        print(periods)
     }
 }

@@ -18,87 +18,28 @@ struct MainView: View {
     @EnvironmentObject var answerManager: AnswerManager
     @EnvironmentObject var periodManager: PeriodManager
     
-    @State private var predictedDates: Set<DateComponents> = []
-    
     @State private var isAddPeriod = false
     
-    // TODO: Replace with cycle data
-    
-    let chartData: [CGFloat] = [40, 29, 30, 30, 31, 28, 29]
-    let chartData2: [Period] = [
-        .init(startDate: Date.now, endDate: Date.now, duration: 7, cycleLength: 30)
-    ]
     var maxCycleDayLength = 50
+    
     
     var body: some View {
         ScrollView {
-            
-            header()
-            periodPrediction()
-            
-//            Chartt(periods: periodManager.periods)
-            
-            CycleLengthChart(data: chartData)
-//            CycleLengthChart(data: periodManager.periods)
-//                .frame(width: screenWidth)
+            Header()
+            PeriodPrediction()
+            CycleLengthChart(periods: periodManager.periods)
         }
         .background(Color(hex: "FEF0F0"))
-//        .background(Color(hex: "F2F2F6"))
-//        .onAppear {
-//            print(periodManager.periods)
-//        }
     }
-        
-    
-//    @ViewBuilder
-//    func Chartt(periods: [Period]) -> AnyView {
-////        return
-//            VStack {
-//                Text("Cycle Length")
-//                HStack(alignment:.bottom) {
-//                    ForEach(periods, id: \.self) { period in
-//                        VStack {
-//                            ZStack(alignment:.bottom) {
-//                                Rectangle()
-//                                    .fill(Color.white)
-//                                    .frame(
-//                                        width: screenWidth*0.06,
-//                                        height: screenWidth*0.5 + 6
-//                                    )
-//                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-//                                    .padding(.horizontal, screenWidth*0.024)
-//
-//                                Rectangle()
-//                                    .fill(Color(hex: "E2DCFE"))
-//                                    .frame(
-//                                        width: screenWidth*0.045,
-//                                        height: period.cycleLength/CGFloat(maxCycleDayLength) * screenWidth*0.5
-//                                    )
-//                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-//                                    .padding(.bottom, 3)
-//                            }
-//
-//                            Text(String(Int(period.cycleLength)))
-//                                .font(.caption)
-//                        }
-//                    }
-//                }
-//            }
-//        .frame(width: screenWidth * 0.93)
-//        .background(Color(hex:"F3F3F3"))
-//        .onAppear{
-////            print(periodManager.periods)
-//        }
-//    }
     
     var bounds: Range<Date> {
-        let start = calendar.date(from: DateComponents(year: 2023, month: 5, day: 6))!
-        let end = calendar.date(from: DateComponents(year: 2023, month: 5, day: 16))!
-        
+        let start = calendar.startOfDay(for: answerManager.startDatePrediction!)
+        let end = calendar.startOfDay(for: answerManager.finishDatePrediction!)
+
         return start ..< end
     }
     
-    func header() -> some View {
+    func Header() -> some View {
         HStack(alignment:.top) {
             VStack(alignment: .leading) {
                 Text("Good Morning,")
@@ -133,7 +74,7 @@ struct MainView: View {
         .frame(width: screenWidth*0.90)
     }
     
-    func periodPrediction() -> some View {
+    func PeriodPrediction() -> some View {
         VStack {
                 HStack {
                     Text("Period Prediction")
@@ -157,27 +98,18 @@ struct MainView: View {
                     .foregroundColor(.white)
                     .padding(.bottom, 25)
                 
-                // TODO: Display highlighted predicted dates
                 MultiDatePicker(
                     "Start Date",
-                    selection: $predictedDates,
+                    selection: $answerManager.predictedDates,
                     in: bounds
                 )
                 .datePickerStyle(.graphical)
                 .disabled(true)
                 .accentColor(.red)
                 .shadow(radius: 0)
-                .onChange(of: predictedDates) { dates in
-                    // Perform operations on selected dates
-                    // For example, print the selected dates
-                    for date in dates {
-                        print(date)
-                    }
-                }
             }
             .padding(.horizontal, screenWidth * 0.05)
         }
-//        .background(Color(hex:"F3F3F3"))
         .background(.white)
         .cornerRadius(15)
         .padding(.horizontal, 15)
@@ -185,8 +117,7 @@ struct MainView: View {
 }
 
 struct CycleLengthChart: View {
-    let data: [CGFloat]
-//    @State private var data: [Period] = []
+    @State var periods: [Period]
     var maxCycleDayLength = 50
 
     var body: some View {
@@ -205,15 +136,12 @@ struct CycleLengthChart: View {
             HStack {
                 Text("Cycle Length")
                     .font(.title3)
-//                    .background(.red)
             }
             .frame(maxWidth: .infinity)
             .padding(.leading, -screenWidth*0.55)
-//            .background(.yellow)
-            
             
             HStack(alignment:.bottom) {
-                ForEach(Array(data.suffix(7).enumerated()), id: \.offset) { index, value in
+                ForEach(Array(periods.suffix(7)), id: \.self) { period in
                     VStack {
                         ZStack(alignment:.bottom) {
                             Rectangle()
@@ -229,26 +157,22 @@ struct CycleLengthChart: View {
                                 .fill(Color(hex: "FEDCDC"))
                                 .frame(
                                     width: screenWidth*0.045,
-                                    height: value/CGFloat(maxCycleDayLength) * screenWidth*0.5
+                                    height: CGFloat(period.cycleLength!)/CGFloat(maxCycleDayLength)*(screenWidth*0.5)
                                 )
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .padding(.bottom, 3)
                         }
-                        
-                        Text(String(Int(value)))
+
+                        Text(String(period.cycleLength!))
                             .font(.caption)
                     }
-                }
+               }
             }
             .padding(.vertical, 10)
-//            .background(.red)
         }
         .background(Color(hex:"F3F3F3"))
         .cornerRadius(15)
         .padding(.horizontal, 15)
-        .onAppear{
-//            print(periodManager.periods)
-        }
     }
 }
 

@@ -29,9 +29,12 @@ struct NumericAnswer: AnswerType {
 }
 
 class AnswerManager: ObservableObject {
+    @Environment(\.calendar) var calendar
+    
     @Published var answers: [Answer] = []
     @Published var startDatePrediction: Date? = nil
     @Published var finishDatePrediction: Date? = nil
+    @Published var predictedDates: Set<DateComponents> = []
     
     func addAnswer(_ answer: Answer) {
         answers.append(answer)
@@ -45,7 +48,7 @@ class AnswerManager: ObservableObject {
     }
     
     func calculatePeriodDate(){
-        print(answers)
+//        print(answers)
         
         guard let lastPeriodAnswer = getLastPeriodAnswer(),
               let cycleLengthAnswer = getCycleLengthAnswer(),
@@ -59,15 +62,35 @@ class AnswerManager: ObservableObject {
            let periodDuration = (periodDurationAnswer.answer as? NumericAnswer)?.number
         {
             print("Start Date Prediction:")
-            let predictedStartDate = Calendar.current.date(byAdding: .day, value: cycleLength, to: lastPeriodDate)!
-            print(predictedStartDate)
+            startDatePrediction = Calendar.current.date(byAdding: .day, value: cycleLength, to: lastPeriodDate)!
+            print(startDatePrediction!)
             
             print("End Date Prediction:")
-            let predictedEndDate = Calendar.current.date(byAdding: .day, value: periodDuration, to: predictedStartDate)!
-            print(predictedEndDate)
+            finishDatePrediction = Calendar.current.date(byAdding: .day, value: periodDuration, to: startDatePrediction!)!
+            print(finishDatePrediction!)
             
             return
         }
+    }
+    
+    func calculatePredictedDates() {
+        let calendar = Calendar.current
+        
+        let (selected, _, _) = AddPeriod().insertDatesBetweenFirstAndLast(
+            from: (
+                calendar.date(from:
+                    calendar.dateComponents([.year, .month, .day], from: startDatePrediction!)
+                )!
+            ),
+            to:(
+                calendar.date(from:
+                    calendar.dateComponents([.year, .month, .day], from: finishDatePrediction!)
+                )!
+            )
+        )
+        predictedDates.formUnion(selected)
+        print("Predicted Dates")
+        print(predictedDates)
     }
     
     func getLastPeriodAnswer() -> Answer? {

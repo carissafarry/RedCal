@@ -124,7 +124,7 @@ struct PromptCard: View {
                     }
                     
                     saveOrUpdateAnswer(answer: answer)
-                    print(answerManager.answers)
+//                    print(answerManager.answers)
                     
                     if currentCardIndex < (prompts.count - 1) {
                         currentCardIndex += 1
@@ -162,6 +162,7 @@ struct PromptCard: View {
                             
                             saveOrUpdateAnswer(answer: answer)
                             answerManager.calculatePeriodDate()
+                            answerManager.calculatePredictedDates()
                             
                             // Add answer data to period data
                             let lastPeriodAnswer = answerManager.getLastPeriodAnswer()

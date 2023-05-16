@@ -12,6 +12,7 @@ struct AddPeriod: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.dismiss) var dismiss
     
+    @EnvironmentObject var answerManager: AnswerManager
     @EnvironmentObject var periodManager: PeriodManager
     
     @State private var selectedDates: Set<DateComponents> = []
@@ -20,11 +21,16 @@ struct AddPeriod: View {
     @State private var period: Period?
     
     
-    var bounds: Range<Date> {
-        let start = calendar.date(from: startDate!)!
-        let end = calendar.date(from: endDate!)!
+    // Get bounds from the latest Period data
+    var bounds: PartialRangeFrom<Date>? {
+        guard let latestPeriod = periodManager.periods.last else {
+            return nil // Return nil if there are no periods available
+        }
+
+        let monthOfLastPeriod = calendar.date(from: calendar.dateComponents([.year, .month], from: latestPeriod.startDate))!
+        let monthOfNextPeriod = calendar.date(byAdding: DateComponents(month: 1), to: monthOfLastPeriod)!
         
-        return start ..< end
+        return monthOfNextPeriod...
     }
     
     func getFirstAndLastDate(from dates: Set<DateComponents>) -> (DateComponents?, DateComponents?) {
@@ -42,7 +48,9 @@ struct AddPeriod: View {
         return (firstDate, lastDate)
     }
     
-    func insertDatesBetweenFirstAndLast(from firstDate: Date, to lastDate: Date) {
+    func insertDatesBetweenFirstAndLast(from firstDate: Date, to lastDate: Date) -> ([DateComponents], Date, Date) {
+        let calendar = Calendar.current
+        
         var startDate = calendar.startOfDay(for: firstDate)
         let endDate = calendar.startOfDay(for: lastDate)
         
@@ -50,29 +58,34 @@ struct AddPeriod: View {
         print(endDate)
         print("\n")
         
-        period = Period(startDate: startDate, endDate: endDate, duration: 0, cycleLength: 0)
+//        period = Period(startDate: startDate, endDate: endDate, duration: 0, cycleLength: 0)
         // TODO: Count duration + cycle length
+        var selected: [DateComponents] = []
         
         while startDate <= endDate {
             let dateComponents = calendar.dateComponents([.year, .month, .day], from: startDate)
-            selectedDates.insert(dateComponents)
+            selected.append(dateComponents)
             startDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
         }
+        return (selected, startDate, endDate)
     }
     
     
     var body: some View {
         NavigationView {
           List {
-              MultiDatePicker("Select Date", selection: $selectedDates)
+              MultiDatePicker("Select Date", selection: $selectedDates, in: bounds!)
                   .datePickerStyle(GraphicalDatePickerStyle())
                   .onChange(of: selectedDates) { dates in
                       (startDate, endDate) = getFirstAndLastDate(from: selectedDates)
                       
-                      insertDatesBetweenFirstAndLast(
+                      let (selected, start, end) = insertDatesBetweenFirstAndLast(
                         from: (calendar.date(from: startDate!)!),
                         to: (calendar.date(from: endDate!)!)
                       )
+                      
+                      period = Period(startDate: start, endDate: end, duration: 0, cycleLength: 0)
+                      selectedDates.formUnion(selected)
                   }
           }
           .toolbar {
