@@ -35,6 +35,8 @@ class AnswerManager: ObservableObject {
     @Published var startDatePrediction: Date? = nil
     @Published var finishDatePrediction: Date? = nil
     @Published var predictedDates: Set<DateComponents> = []
+    @Published var cycleLengths: [Int] = []
+    
     
     func addAnswer(_ answer: Answer) {
         answers.append(answer)
@@ -47,18 +49,42 @@ class AnswerManager: ObservableObject {
         answers[index] = newAnswer
     }
     
-    func calculatePeriodDate(){
-//        print(answers)
+    func setPredictedDates(selected: [DateComponents]) {
+        predictedDates.formUnion(selected)
+    }
+    
+    func saveOrUpdateAnswer(answer: Answer) {        
+        if let index = answers.firstIndex(where: { $0.promptID == answer.promptID }) {
+            updateAnswer(at: index, with: answer)
+        } else {
+            addAnswer(answer)
+        }
+    }
+    
+    func addCycleLength(_ cycleLength: Int) {
+        cycleLengths.append(cycleLength)
+    }
+    
+    func calculateAvgCycleLength() -> Int? {
+        guard !cycleLengths.isEmpty else {
+            return 0
+        }
         
+        let total = cycleLengths.reduce(0, +)
+        let average = total / cycleLengths.count
+        
+        return average
+    }
+    
+    func calculatePeriodDate(){
         guard let lastPeriodAnswer = getLastPeriodAnswer(),
-              let cycleLengthAnswer = getCycleLengthAnswer(),
               let periodDurationAnswer = getPeriodDurationAnswer()
         else {
             return
         }
 
         if let lastPeriodDate = (lastPeriodAnswer.answer as? DateAnswer)?.date,
-           let cycleLength = (cycleLengthAnswer.answer as? NumericAnswer)?.number,
+           let cycleLength = calculateAvgCycleLength(),
            let periodDuration = (periodDurationAnswer.answer as? NumericAnswer)?.number
         {
             print("Start Date Prediction:")
@@ -76,7 +102,7 @@ class AnswerManager: ObservableObject {
     func calculatePredictedDates() {
         let calendar = Calendar.current
         
-        let (selected, _, _) = AddPeriod().insertDatesBetweenFirstAndLast(
+        let (selected, _, _) = insertDatesBetweenFirstAndLast(
             from: (
                 calendar.date(from:
                     calendar.dateComponents([.year, .month, .day], from: startDatePrediction!)
@@ -88,9 +114,31 @@ class AnswerManager: ObservableObject {
                 )!
             )
         )
-        predictedDates.formUnion(selected)
+        setPredictedDates(selected: selected)
         print("Predicted Dates")
         print(predictedDates)
+    }
+    
+    // TODO: Double function on PeriodManager (cannot access PeriodManager)
+    func insertDatesBetweenFirstAndLast(from firstDate: Date, to lastDate: Date) -> ([DateComponents], Date, Date) {
+        let calendar = Calendar.current
+        
+        let startDate = calendar.startOfDay(for: firstDate)
+        var startDateIterator = calendar.startOfDay(for: firstDate)
+        let endDate = calendar.startOfDay(for: lastDate)
+        
+        print(startDate)
+        print(endDate)
+        print("\n")
+        
+        var selected: [DateComponents] = []
+        
+        while startDateIterator <= endDate {
+            let dateComponents = calendar.dateComponents([.year, .month, .day], from: startDateIterator)
+            selected.append(dateComponents)
+            startDateIterator = calendar.date(byAdding: .day, value: 1, to: startDateIterator)!
+        }
+        return (selected, startDate, endDate)
     }
     
     func getLastPeriodAnswer() -> Answer? {

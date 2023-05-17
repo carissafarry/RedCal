@@ -23,7 +23,6 @@ struct ContentView_Previews: PreviewProvider {
         @StateObject var periodManager = PeriodManager()
         
         ContentView()
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(answerManager)
             .environmentObject(periodManager)
     }

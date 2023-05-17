@@ -17,7 +17,6 @@ struct MainView: View {
     
     @EnvironmentObject var answerManager: AnswerManager
     @EnvironmentObject var periodManager: PeriodManager
-    
     @State private var isAddPeriod = false
     
     var maxCycleDayLength = 50
@@ -25,7 +24,7 @@ struct MainView: View {
     
     var body: some View {
         ScrollView {
-            Header()
+            Header(periods: $periodManager.periods)
             PeriodPrediction()
             CycleLengthChart(periods: periodManager.periods)
         }
@@ -39,7 +38,7 @@ struct MainView: View {
         return start ..< end
     }
     
-    func Header() -> some View {
+    func Header(periods: Binding<[Period]>) -> some View {
         HStack(alignment:.top) {
             VStack(alignment: .leading) {
                 Text("Good Morning,")
@@ -67,7 +66,7 @@ struct MainView: View {
                     }
                 }
                 .sheet(isPresented: $isAddPeriod, content: {
-                    AddPeriod()
+                    AddPeriod(periods: periods)
                 })
             }
         }
@@ -117,7 +116,7 @@ struct MainView: View {
 }
 
 struct CycleLengthChart: View {
-    @State var periods: [Period]
+    var periods: [Period]
     var maxCycleDayLength = 50
 
     var body: some View {

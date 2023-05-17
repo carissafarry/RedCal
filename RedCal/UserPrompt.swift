@@ -10,7 +10,6 @@ import SwiftUI
 struct Prompt {
     let question: String
     let answerInputType: AnswerInputType
-    let options: [String]?
 }
 
 let screenWidth = UIScreen.main.bounds.width
@@ -23,18 +22,15 @@ struct UserPrompt: View {
     @State var prompts: [Prompt] = [
         Prompt(
             question: "When is your last period date?",
-            answerInputType: .date,
-            options: nil
+            answerInputType: .date
         ),
         Prompt(
             question: "How much your usual period duration?",
-            answerInputType: .number,
-            options: nil
+            answerInputType: .number
         ),
         Prompt(
             question: "How much your usual period cycle length?",
-            answerInputType: .number,
-            options: nil
+            answerInputType: .number
         ),
     ]
     
@@ -123,8 +119,7 @@ struct PromptCard: View {
                             answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
                     }
                     
-                    saveOrUpdateAnswer(answer: answer)
-//                    print(answerManager.answers)
+                    answerManager.saveOrUpdateAnswer(answer: answer)
                     
                     if currentCardIndex < (prompts.count - 1) {
                         currentCardIndex += 1
@@ -157,19 +152,27 @@ struct PromptCard: View {
                             }
                         }
                         .simultaneousGesture(TapGesture().onEnded{
+                            // Add last prompt to answers data
                             let answer: Answer
                             answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
                             
-                            saveOrUpdateAnswer(answer: answer)
-                            answerManager.calculatePeriodDate()
-                            answerManager.calculatePredictedDates()
+                            answerManager.saveOrUpdateAnswer(answer: answer)
                             
-                            // Add answer data to period data
+                            // Save cycle length data
                             let lastPeriodAnswer = answerManager.getLastPeriodAnswer()
                             let periodDurationAnswer = answerManager.getPeriodDurationAnswer()
                             let cycleLengthAnswer = answerManager.getCycleLengthAnswer()
                             let startDatePeriod = answerManager.getStartDateOfLastPeriod()
                             
+                            if let cycleLength = (cycleLengthAnswer!.answer as? NumericAnswer)?.number {
+                                answerManager.addCycleLength(cycleLength)
+                            }
+                            
+                            // Calculate the next prediction
+                            answerManager.calculatePeriodDate()
+                            answerManager.calculatePredictedDates()
+
+                            // Add answer data as the first period data
                             if let lastPeriodDate = (lastPeriodAnswer!.answer as? DateAnswer)?.date,
                                let cycleLength = (cycleLengthAnswer!.answer as? NumericAnswer)?.number,
                                let periodDuration = (periodDurationAnswer!.answer as? NumericAnswer)?.number {
@@ -187,16 +190,6 @@ struct PromptCard: View {
                 }
                 .background(Color(hex: "FEF0F0"))
             }
-        }
-    }
-    
-    private func saveOrUpdateAnswer(answer: Answer) {
-        let answers = answerManager.answers
-        
-        if let index = answers.firstIndex(where: { $0.promptID == answer.promptID }) {
-            answerManager.updateAnswer(at: index, with: answer)
-        } else {
-            answerManager.addAnswer(answer)
         }
     }
 }

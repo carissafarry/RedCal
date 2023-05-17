@@ -15,11 +15,70 @@ struct AddPeriod: View {
     @EnvironmentObject var answerManager: AnswerManager
     @EnvironmentObject var periodManager: PeriodManager
     
+    @Binding var periods: [Period]
+    
     @State private var selectedDates: Set<DateComponents> = []
     @State private var startDate: DateComponents?
     @State private var endDate: DateComponents?
     @State private var period: Period?
+    @State private var duration: Int?
+    @State private var cycleLength: Int?
     
+    
+    var body: some View {
+        NavigationView {
+          List {
+              MultiDatePicker("Select Date", selection: $selectedDates, in: bounds!)
+                  .datePickerStyle(GraphicalDatePickerStyle())
+                  .onChange(of: selectedDates) { dates in
+                      (startDate, endDate) = getFirstAndLastDate(from: selectedDates)
+                      
+                      let (selected, start, end) = periodManager.insertDatesBetweenFirstAndLast(
+                        from: (calendar.date(from: startDate!)!),
+                        to: (calendar.date(from: endDate!)!)
+                      )
+                      duration = periodManager.countDuration(startDate: start, endDate: end)
+                      cycleLength = periodManager.countCycleLength(newStartDate: start)!
+                      
+                      period = Period(startDate: start, endDate: end, duration: duration, cycleLength: cycleLength)
+                      selectedDates.formUnion(selected)
+                  }
+          }
+          .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Save") {
+                    if let period = period {
+                        periods.append(period)
+                    }
+                    
+                    // Calculate for the next period prediction
+                    let answers: [Answer] = [
+                      Answer(promptID: 0, answer: DateAnswer(date: calendar.date(from: endDate!)!)),
+                      Answer(promptID: 1, answer: NumericAnswer(number: duration!)),
+                      Answer(promptID: 2, answer: NumericAnswer(number: cycleLength!)),
+                    ]
+                    
+                    for answer in answers {
+                        answerManager.saveOrUpdateAnswer(answer: answer)
+                    }
+                    answerManager.addCycleLength(cycleLength!)
+                    answerManager.calculatePeriodDate()
+                    answerManager.calculatePredictedDates()
+                    
+                    print(period!)
+                    dismiss()
+                }
+            }
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel", role: .cancel) {
+                    dismiss()
+                }
+            }
+          }
+          .navigationTitle("Add Period")
+          .navigationBarTitleDisplayMode(.inline)
+        }
+    }
     
     // Get bounds from the latest Period data
     var bounds: PartialRangeFrom<Date>? {
@@ -47,72 +106,10 @@ struct AddPeriod: View {
         
         return (firstDate, lastDate)
     }
-    
-    func insertDatesBetweenFirstAndLast(from firstDate: Date, to lastDate: Date) -> ([DateComponents], Date, Date) {
-        let calendar = Calendar.current
-        
-        var startDate = calendar.startOfDay(for: firstDate)
-        let endDate = calendar.startOfDay(for: lastDate)
-        
-        print(startDate)
-        print(endDate)
-        print("\n")
-        
-//        period = Period(startDate: startDate, endDate: endDate, duration: 0, cycleLength: 0)
-        // TODO: Count duration + cycle length
-        var selected: [DateComponents] = []
-        
-        while startDate <= endDate {
-            let dateComponents = calendar.dateComponents([.year, .month, .day], from: startDate)
-            selected.append(dateComponents)
-            startDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
-        }
-        return (selected, startDate, endDate)
-    }
-    
-    
-    var body: some View {
-        NavigationView {
-          List {
-              MultiDatePicker("Select Date", selection: $selectedDates, in: bounds!)
-                  .datePickerStyle(GraphicalDatePickerStyle())
-                  .onChange(of: selectedDates) { dates in
-                      (startDate, endDate) = getFirstAndLastDate(from: selectedDates)
-                      
-                      let (selected, start, end) = insertDatesBetweenFirstAndLast(
-                        from: (calendar.date(from: startDate!)!),
-                        to: (calendar.date(from: endDate!)!)
-                      )
-                      
-                      period = Period(startDate: start, endDate: end, duration: 0, cycleLength: 0)
-                      selectedDates.formUnion(selected)
-                  }
-          }
-          .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Save") {
-                    if let period = period {
-                        periodManager.addPeriod(period)
-                    }
-                    print(periodManager.periods)
-                    dismiss()
-                }
-            }
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel", role: .cancel) {
-                    dismiss()
-                }
-            }
-          }
-          .navigationTitle("Add Period")
-          .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-        
 }
 
-struct AddPeriod_Previews: PreviewProvider {
-    static var previews: some View {
-        AddPeriod()
-    }
-}
+//struct AddPeriod_Previews: PreviewProvider {
+//    static var previews: some View {
+////        AddPeriod()
+//    }
+//}
