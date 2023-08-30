@@ -40,7 +40,7 @@ struct UserPrompt: View {
         VStack {
             TabView(selection: $currentCardIndex) {
                 ForEach((prompts.indices), id: \.self) { index in
-                  PromptCard(prompts: $prompts, currentCardIndex: $currentCardIndex)
+                    PromptCard(prompts: $prompts, currentCardIndex: $currentCardIndex)
                 }
                 
             }
@@ -91,32 +91,32 @@ struct PromptCard: View {
                 
                 // Conditional picker and selection for data saving
                 switch prompts[currentCardIndex].answerInputType {
-                    case .date:
-                        DatePicker("", selection: $dateAnswer, displayedComponents: .date)
-                            .datePickerStyle(.wheel)
-                            .frame(maxHeight: 400)
-                            .labelsHidden()
-                        
-                    case .number:
-                        Picker("", selection: $numberAnswer) {
-                            ForEach(1...30, id: \.self) { number in
-                                Text("\(number)")
-                            }
-                        }
+                case .date:
+                    DatePicker("", selection: $dateAnswer, displayedComponents: .date)
+                        .datePickerStyle(.wheel)
                         .frame(maxHeight: 400)
-                            .pickerStyle(.wheel)
-                            .labelsHidden()
-                            .padding(.horizontal, screenWidth * 0.1)
+                        .labelsHidden()
+                    
+                case .number:
+                    Picker("", selection: $numberAnswer) {
+                        ForEach(1...30, id: \.self) { number in
+                            Text("\(number)")
+                        }
+                    }
+                    .frame(maxHeight: 400)
+                    .pickerStyle(.wheel)
+                    .labelsHidden()
+                    .padding(.horizontal, screenWidth * 0.1)
                 }
                 
                 Button(action: {
                     let answer: Answer
                     
                     switch prompts[currentCardIndex].answerInputType {
-                        case .date:
-                            answer = Answer(promptID: currentCardIndex, answer: DateAnswer(date: dateAnswer))
-                        case .number:
-                            answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
+                    case .date:
+                        answer = Answer(promptID: currentCardIndex, answer: DateAnswer(date: dateAnswer))
+                    case .number:
+                        answer = Answer(promptID: currentCardIndex, answer: NumericAnswer(number: numberAnswer))
                     }
                     
                     answerManager.saveOrUpdateAnswer(answer: answer)
@@ -146,7 +146,7 @@ struct PromptCard: View {
                                     .frame(width: screenWidth * 0.65, height: screenHeight * 0.05)
                                     .cornerRadius(10)
                                     .foregroundColor(.green)
-
+                                
                                 Text("Next")
                                     .foregroundColor(.white)
                             }
@@ -171,16 +171,16 @@ struct PromptCard: View {
                             // Calculate the next prediction
                             answerManager.calculatePeriodDate()
                             answerManager.calculatePredictedDates()
-
+                            
                             // Add answer data as the first period data
                             if let lastPeriodDate = (lastPeriodAnswer!.answer as? DateAnswer)?.date,
                                let cycleLength = (cycleLengthAnswer!.answer as? NumericAnswer)?.number,
                                let periodDuration = (periodDurationAnswer!.answer as? NumericAnswer)?.number {
                                 let firstPeriod = Period(
-                                 startDate: startDatePeriod!,
-                                 endDate: lastPeriodDate,
-                                 duration: periodDuration,
-                                 cycleLength: cycleLength
+                                    startDate: startDatePeriod!,
+                                    endDate: lastPeriodDate,
+                                    duration: periodDuration,
+                                    cycleLength: cycleLength
                                 )
                                 periodManager.addPeriod(firstPeriod)
                             }

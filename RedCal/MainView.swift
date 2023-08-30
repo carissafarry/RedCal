@@ -34,7 +34,7 @@ struct MainView: View {
     var bounds: Range<Date> {
         let start = calendar.startOfDay(for: answerManager.startDatePrediction!)
         let end = calendar.startOfDay(for: answerManager.finishDatePrediction!)
-
+        
         return start ..< end
     }
     
@@ -75,22 +75,22 @@ struct MainView: View {
     
     func PeriodPrediction() -> some View {
         VStack {
-                HStack {
-                    Text("Period Prediction")
-                        .font(.body).bold()
-                        .foregroundColor(Color(hex: "CE5656"))
-                    
-                    Spacer()
-                }
-                .padding(.vertical, 10)
-                .padding(.horizontal, screenWidth * 0.05)
-                .background(.white)
+            HStack {
+                Text("Period Prediction")
+                    .font(.body).bold()
+                    .foregroundColor(Color(hex: "CE5656"))
+                
+                Spacer()
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, screenWidth * 0.05)
+            .background(.white)
             
-//            Rectangle()
-//                .frame(height: 0.1)
-//                    .foregroundColor(.black)
-//                    .padding(.top, -10)
-
+            //            Rectangle()
+            //                .frame(height: 0.1)
+            //                    .foregroundColor(.black)
+            //                    .padding(.top, -10)
+            
             ZStack {
                 Rectangle()
                     .frame(height: 300)
@@ -118,7 +118,7 @@ struct MainView: View {
 struct CycleLengthChart: View {
     var periods: [Period]
     var maxCycleDayLength = 50
-
+    
     var body: some View {
         VStack {
             HStack {
@@ -151,7 +151,7 @@ struct CycleLengthChart: View {
                                 )
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .padding(.horizontal, screenWidth*0.024)
-
+                            
                             Rectangle()
                                 .fill(Color(hex: "FEDCDC"))
                                 .frame(
@@ -161,11 +161,11 @@ struct CycleLengthChart: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .padding(.bottom, 3)
                         }
-
+                        
                         Text(String(period.cycleLength!))
                             .font(.caption)
                     }
-               }
+                }
             }
             .padding(.vertical, 10)
         }

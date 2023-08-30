@@ -27,56 +27,56 @@ struct AddPeriod: View {
     
     var body: some View {
         NavigationView {
-          List {
-              MultiDatePicker("Select Date", selection: $selectedDates, in: bounds!)
-                  .datePickerStyle(GraphicalDatePickerStyle())
-                  .onChange(of: selectedDates) { dates in
-                      (startDate, endDate) = getFirstAndLastDate(from: selectedDates)
-                      
-                      let (selected, start, end) = periodManager.insertDatesBetweenFirstAndLast(
-                        from: (calendar.date(from: startDate!)!),
-                        to: (calendar.date(from: endDate!)!)
-                      )
-                      duration = periodManager.countDuration(startDate: start, endDate: end)
-                      cycleLength = periodManager.countCycleLength(newStartDate: start)!
-                      
-                      period = Period(startDate: start, endDate: end, duration: duration, cycleLength: cycleLength)
-                      selectedDates.formUnion(selected)
-                  }
-          }
-          .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Save") {
-                    if let period = period {
-                        periods.append(period)
+            List {
+                MultiDatePicker("Select Date", selection: $selectedDates, in: bounds!)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .onChange(of: selectedDates) { dates in
+                        (startDate, endDate) = getFirstAndLastDate(from: selectedDates)
+                        
+                        let (selected, start, end) = periodManager.insertDatesBetweenFirstAndLast(
+                            from: (calendar.date(from: startDate!)!),
+                            to: (calendar.date(from: endDate!)!)
+                        )
+                        duration = periodManager.countDuration(startDate: start, endDate: end)
+                        cycleLength = periodManager.countCycleLength(newStartDate: start)!
+                        
+                        period = Period(startDate: start, endDate: end, duration: duration, cycleLength: cycleLength)
+                        selectedDates.formUnion(selected)
                     }
-                    
-                    // Calculate for the next period prediction
-                    let answers: [Answer] = [
-                      Answer(promptID: 0, answer: DateAnswer(date: calendar.date(from: endDate!)!)),
-                      Answer(promptID: 1, answer: NumericAnswer(number: duration!)),
-                      Answer(promptID: 2, answer: NumericAnswer(number: cycleLength!)),
-                    ]
-                    
-                    for answer in answers {
-                        answerManager.saveOrUpdateAnswer(answer: answer)
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save") {
+                        if let period = period {
+                            periods.append(period)
+                        }
+                        
+                        // Calculate for the next period prediction
+                        let answers: [Answer] = [
+                            Answer(promptID: 0, answer: DateAnswer(date: calendar.date(from: endDate!)!)),
+                            Answer(promptID: 1, answer: NumericAnswer(number: duration!)),
+                            Answer(promptID: 2, answer: NumericAnswer(number: cycleLength!)),
+                        ]
+                        
+                        for answer in answers {
+                            answerManager.saveOrUpdateAnswer(answer: answer)
+                        }
+                        answerManager.addCycleLength(cycleLength!)
+                        answerManager.calculatePeriodDate()
+                        answerManager.calculatePredictedDates()
+                        
+                        print(period!)
+                        dismiss()
                     }
-                    answerManager.addCycleLength(cycleLength!)
-                    answerManager.calculatePeriodDate()
-                    answerManager.calculatePredictedDates()
-                    
-                    print(period!)
-                    dismiss()
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
                 }
             }
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel", role: .cancel) {
-                    dismiss()
-                }
-            }
-          }
-          .navigationTitle("Add Period")
-          .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Add Period")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
@@ -85,7 +85,7 @@ struct AddPeriod: View {
         guard let latestPeriod = periodManager.periods.last else {
             return nil // Return nil if there are no periods available
         }
-
+        
         let monthOfLastPeriod = calendar.date(from: calendar.dateComponents([.year, .month], from: latestPeriod.startDate))!
         let monthOfNextPeriod = calendar.date(byAdding: DateComponents(month: 1), to: monthOfLastPeriod)!
         
