@@ -82,7 +82,7 @@ class AnswerManager: ObservableObject {
         else {
             return
         }
-
+        
         if let lastPeriodDate = (lastPeriodAnswer.answer as? DateAnswer)?.date,
            let cycleLength = calculateAvgCycleLength(),
            let periodDuration = (periodDurationAnswer.answer as? NumericAnswer)?.number
@@ -105,13 +105,13 @@ class AnswerManager: ObservableObject {
         let (selected, _, _) = insertDatesBetweenFirstAndLast(
             from: (
                 calendar.date(from:
-                    calendar.dateComponents([.year, .month, .day], from: startDatePrediction!)
-                )!
+                                calendar.dateComponents([.year, .month, .day], from: startDatePrediction!)
+                             )!
             ),
             to:(
                 calendar.date(from:
-                    calendar.dateComponents([.year, .month, .day], from: finishDatePrediction!)
-                )!
+                                calendar.dateComponents([.year, .month, .day], from: finishDatePrediction!)
+                             )!
             )
         )
         setPredictedDates(selected: selected)
@@ -168,12 +168,12 @@ class AnswerManager: ObservableObject {
         else {
             return nil
         }
-
+        
         if let lastPeriodDate = (lastPeriodAnswer.answer as? DateAnswer)?.date,
            let periodDuration = (periodDurationAnswer.answer as? NumericAnswer)?.number,
            answers.count > 0 {
             let adjustedStartDate = Calendar.current.date(byAdding: .day, value: -(periodDuration), to: lastPeriodDate)!
-
+            
             return adjustedStartDate
         }
         return nil

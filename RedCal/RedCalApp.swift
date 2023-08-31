@@ -11,7 +11,7 @@ import SwiftUI
 struct RedCalApp: App {
     @StateObject var answerManager = AnswerManager()
     @StateObject var periodManager = PeriodManager()
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
