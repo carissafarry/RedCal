@@ -93,6 +93,7 @@ struct PromptCard: View {
                 switch prompts[currentCardIndex].answerInputType {
                 case .date:
                     DatePicker("", selection: $dateAnswer, displayedComponents: .date)
+                        .colorScheme(.light)
                         .datePickerStyle(.wheel)
                         .frame(maxHeight: 400)
                         .labelsHidden()
@@ -103,6 +104,7 @@ struct PromptCard: View {
                             Text("\(number)")
                         }
                     }
+                    .colorScheme(.light)
                     .frame(maxHeight: 400)
                     .pickerStyle(.wheel)
                     .labelsHidden()
